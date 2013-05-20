@@ -5,13 +5,6 @@ and incremental), as well as leaderboards. It also demonstrates Interactive
 Posts and Deep-Linking, allowing you to challenge your friends to beat your
 score on either the web or mobile version.
 
-## Boilerplate
-
-This sample app makes use of [HTML5 Boilerplate](http://html5boilerplate.com)
-as a basic foundation. For simplicity's sake, many elements of the original
-boilerplate have been removed. You can find out more about this foundation by
-reading the boilerplate_readme.md file
-
 ## Code
 
 You can find the code that runs the game in the `js` directory. The following
@@ -36,8 +29,6 @@ files are located there:
 bottom of the page
 * `login.js` handles most of the initial login logic
 * `player.js` simply handles loading the player information so we can say hello.
-* `plugins.js` is from the HTML5 Boilerplate code, and it helps to ensure that
-  calling `console.log()` does not throw errors in old versions of IE
 * `utils.js` has a function to roll a random number, and determine if a number
   is prime
 * `welcome.js` manages the simple logic around the welcome page

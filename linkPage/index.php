@@ -45,7 +45,7 @@ if ($gamedata) {
   the user. -->
 <div itemscope itemtype ="http://schema.org/Thing" style="display: none">
     <div id="schemaName" itemprop="name">Can you beat my score?</div>
-    <div itemprop="image"><img src="480.jpeg"></div>
+    <div itemprop="image"><img src="480.png"></div>
     <div itemprop="description"><?= $descrip ?></div>
 </div>
 
