@@ -36,22 +36,22 @@ leaderboardTable.showLeaderboard = function(leaderboardId, backDestination)
   leaderboardTable.goBackTo = backDestination;
   console.log("I am going to show leaderboard ", leaderboardId);
   $('#leaderboardTable tbody').html('');
-  gapi.client.request({
-    path: login.basePath + '/leaderboards/' + leaderboardId + '/scores/social',
-    params: {leaderboardId: leaderboardId,
-      timeSpan: 'weekly'
-      },
-    callback: function(data){
-      console.log('This is your data: ', data);
-      if (data.hasOwnProperty('items')) {
-        for (var i=0; i<data.items.length; i++) {
-          var $leaderboardRow = leaderboardTable.buildTableRowFromData(data.items[i]);
-          $leaderboardRow.appendTo($('#leaderboardTable tbody'));
-        }
-      }
-      $('#leaderboard').fadeIn();
-    }
 
+  var request = gapi.client.games.scores.list(
+      {collection: 'SOCIAL',
+        leaderboardId: leaderboardId,
+        timeSpan: 'WEEKLY'
+      }
+  );
+  request.execute(function(response) {
+    console.log('This is your data: ', response);
+    if (response.hasOwnProperty('items')) {
+      for (var i=0; i<response.items.length; i++) {
+        var $leaderboardRow = leaderboardTable.buildTableRowFromData(response.items[i]);
+        $leaderboardRow.appendTo($('#leaderboardTable tbody'));
+      }
+    }
+    $('#leaderboard').fadeIn();
   });
   $('#pageHeader').text(leadManager.getLeaderboardObject(leaderboardId).name);
 

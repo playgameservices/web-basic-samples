@@ -33,47 +33,39 @@ achManager.preloaded = false;
 // One of which loads up the achievement definitions, and the second
 // loads up which achievements the player actually earned
 achManager.loadData = function() {
-  gapi.client.request({
-    path: login.basePath + '/achievements',
-    callback : function(data) {
-      console.log('Achievement definitions', data);
-      if (data.kind == 'games#achievementDefinitionsListResponse' &&
-          data.hasOwnProperty('items')) {
-        for (var i =0; i<data.items.length; i++) {
-          achManager.achievements[data.items[i].id] = data.items[i];
-          // Will be overwritten later if we have achievement data
-          achManager.achievements[data.items[i].id].achievementState = data.items[i].initialState;
-        }
-        welcome.dataLoaded(welcome.ENUM_ACHIEVEMENT_DEFS);
-        achManager.loadAchievementsEarnedByPlayer();
-
+  var request = gapi.client.games.achievementDefinitions.list();
+  request.execute(function(response) {
+    console.log('Achievement definitions', response);
+    if (response.kind == 'games#achievementDefinitionsListResponse' &&
+        response.hasOwnProperty('items')) {
+      for (var i =0; i<response.items.length; i++) {
+        achManager.achievements[response.items[i].id] = response.items[i];
+        // Will be overwritten later if we have achievement data
+        achManager.achievements[response.items[i].id].achievementState = response.items[i].initialState;
       }
+      welcome.dataLoaded(welcome.ENUM_ACHIEVEMENT_DEFS);
+      achManager.loadAchievementsEarnedByPlayer();
+
     }
   });
 };
 
 achManager.loadAchievementsEarnedByPlayer = function() {
-  gapi.client.request({
-    path: login.basePath + '/players/me/achievements',
-    params: {
-      playerId: 'me',
-      state: 'ALL'
-    },
-    callback : function(data) {
-      console.log('Your achievement data: ', data);
-      if (data.kind == 'games#playerAchievementListResponse' &&
-          data.hasOwnProperty('items')) {
-        for (var i=0; i<data.items.length; i++) {
-          var nextAch = data.items[i];
-          achManager.achievements[nextAch.id].achievementState = nextAch.achievementState;
-          if (nextAch.hasOwnProperty('formattedCurrentStepsString')) {
-            achManager.achievements[nextAch.id].formattedCurrentStepsString = nextAch.formattedCurrentStepsString;
-          }
+  var request = gapi.client.games.achievements.list({playerId: 'me'});
+  request.execute(function(response) {
+    console.log('Your achievement data: ', response);
+    if (response.kind == 'games#playerAchievementListResponse' &&
+        response.hasOwnProperty('items')) {
+      for (var i=0; i<response.items.length; i++) {
+        var nextAch = response.items[i];
+        achManager.achievements[nextAch.id].achievementState = nextAch.achievementState;
+        if (nextAch.hasOwnProperty('formattedCurrentStepsString')) {
+          achManager.achievements[nextAch.id].formattedCurrentStepsString = nextAch.formattedCurrentStepsString;
         }
-        welcome.dataLoaded(welcome.ENUM_ACHIEVEMENT_PROGRESS);
-      } else {
-        console.log("**Unexpected response **", data);
       }
+      welcome.dataLoaded(welcome.ENUM_ACHIEVEMENT_PROGRESS);
+    } else {
+      console.log("**Unexpected response **", response);
     }
   });
 
@@ -108,46 +100,40 @@ achManager.getNameForId = function(achId)
 
 achManager.submitProgress = function(achId, amount)
 {
-  gapi.client.request({
-    path: login.basePath + '/achievements/' + achId + '/increment',
-    params: {achievementId: achId,
-      stepsToIncrement: amount},
-    method: 'post',
-    callback: function(data) {
-      console.log('Data from incrementing achievement is ', data);
-      // Let's updated our locally cached version
-      achManager.achievements[achId].currentSteps = data.currentSteps;
-      achManager.achievements[achId].formattedCurrentStepsString = String(data.currentSteps);
-      if (data.newlyUnlocked ) {
-        achievementWidget.showAchievementWidget(achId);
-      } else {
-        console.log('You either haven\'t unlocked ' + achManager.achievements[achId].name
-            + ' yet, or you unlocked it already.');
-      }
+  var request = gapi.client.games.achievements.increment(
+      {achievementId: achId,
+      stepsToIncrement: amount}
+  );
+  request.execute(function(response) {
+    console.log('Data from incrementing achievement is ', response);
+    // Let's updated our locally cached version
+    achManager.achievements[achId].currentSteps = response.currentSteps;
+    achManager.achievements[achId].formattedCurrentStepsString = String(response.currentSteps);
+    if (response.newlyUnlocked ) {
+      achievementWidget.showAchievementWidget(achId);
+    } else {
+      console.log('You either haven\'t unlocked ' + achManager.achievements[achId].name
+          + ' yet, or you unlocked it already.');
     }
-  })
-
+  });
 };
-
 
 
 achManager.unlockAchievement = function(achId)
 {
-  gapi.client.request({
-    path: login.basePath + '/achievements/' + achId + '/unlock',
-    method: 'post',
-    callback: function(data) {
-      console.log('Data from earning achievement is ', data);
-      if (data.newlyUnlocked ) {
-        achievementWidget.showAchievementWidget(achId);
-        // Let's refresh our data here, while we're at it
-        achManager.loadAchievementsEarnedByPlayer();
-      } else {
-        console.log('You unlocked ' + achManager.achievements[achId].name + ' but you already unlocked it earlier.');
-      }
+  var request = gapi.client.games.achievements.increment(
+      {achievementId: achId}
+  );
+  request.execute(function(response) {
+    console.log('Data from earning achievement is ', response);
+    if (response.newlyUnlocked ) {
+      achievementWidget.showAchievementWidget(achId);
+      // Let's refresh our data here, while we're at it
+      achManager.loadAchievementsEarnedByPlayer();
+    } else {
+      console.log('You unlocked ' + achManager.achievements[achId].name + ' but you already unlocked it earlier.');
     }
-
-  })
+  });
 
 };
 

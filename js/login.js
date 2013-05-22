@@ -32,7 +32,6 @@ login.loggedIn = false;
 
 
 login.scopes = 'https://www.googleapis.com/auth/games';
-login.basePath = '/games/v1';
 login.plusPath = '/plus/v1';
 login.adminPath = '/games/v1management';
 
@@ -41,6 +40,22 @@ login.init = function() {
   window.setTimeout(login.trySilentAuth, 1);
 };
 
+/**
+ * This function allows us to load up the game service via the discovery doc
+ * and makes calls directly through the client library instead of needing
+ * to specify the REST endpoints.
+ */
+login.loadClient = function() {
+  gapi.client.load('games','v1',function(response) {
+    player.loadLocalPlayer();
+    achManager.loadData();
+    leadManager.preloadData();
+    welcome.loadUp();
+    game.init();
+    challenge.tryToLoad();
+  });
+
+};
 
 
 login.handleAuthResult = function(auth) {
@@ -48,12 +63,7 @@ login.handleAuthResult = function(auth) {
   if (auth) {
     console.log('Hooray! You\'re logged in!');
     $('#loginDiv').fadeOut();
-    player.loadLocalPlayer();
-    achManager.loadData();
-    leadManager.preloadData();
-    welcome.loadUp();
-    game.init();
-    challenge.tryToLoad();
+    login.loadClient();
 
   } else {
     $('#loginDiv').fadeIn();

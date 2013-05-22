@@ -28,19 +28,16 @@ player.profileUrl = '';
 player.userId = '';
 
 player.loadLocalPlayer = function() {
-  gapi.client.request({
-        path: login.basePath + '/players/me',
-        callback: function(data) {
-          console.log('This is who you are ', data);
-          $('#welcome #message').text('Welcome, ' + data.displayName + '!');
-          $('#logoutLink').show();
-          player.displayName = data.displayName;
-          player.profileUrl = data.avatarImageUrl;
-          player.userId = data.playerId;
-          console.log('This is the player object', player);
-          welcome.dataLoaded(welcome.ENUM_PLAYER_DATA);
-        }
-      }
-  )
+  var request = gapi.client.games.players.get({playerId: 'me'});
+  request.execute(function(response) {
+    console.log('This is who you are ', response);
+    $('#welcome #message').text('Welcome, ' + response.displayName + '!');
+    $('#logoutLink').show();
+    player.displayName = response.displayName;
+    player.profileUrl = response.avatarImageUrl;
+    player.userId = response.playerId;
+    console.log('This is the player object', player);
+    welcome.dataLoaded(welcome.ENUM_PLAYER_DATA);
+  });
 };
 

@@ -59,7 +59,7 @@ welcome.activateButtonsIfReady = function()
       welcome.achievement_defs_loaded &&
       welcome.achievement_progress_loaded &&
       welcome.player_data_loaded &&
-      welcome.challenge_loaded)
+      welcome.challenge_loaded )
   {
     $('#welcome input').attr('disabled',false);
     // Go right to a challenge if there's one already
