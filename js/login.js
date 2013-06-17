@@ -29,11 +29,7 @@ login.userId = '';
 login.loggedIn = false;
 
 
-
-
 login.scopes = 'https://www.googleapis.com/auth/games';
-login.plusPath = '/plus/v1';
-login.adminPath = '/games/v1management';
 
 login.init = function() {
   // Need to add this 1 ms timeout to work around an odd but annoying bug
@@ -46,6 +42,8 @@ login.init = function() {
  * to specify the REST endpoints.
  */
 login.loadClient = function() {
+
+  // Load up /games/v1
   gapi.client.load('games','v1',function(response) {
     player.loadLocalPlayer();
     achManager.loadData();
@@ -53,6 +51,16 @@ login.loadClient = function() {
     welcome.loadUp();
     game.init();
     challenge.tryToLoad();
+  });
+
+  // Load up v1management
+  gapi.client.load('gamesManagement','v1management', function(response) {
+    welcome.dataLoaded(welcome.ENUM_MANAGEMENT_API);
+  });
+
+  // Load up /plus/v1
+  gapi.client.load('plus','v1', function(response) {
+    welcome.dataLoaded(welcome.ENUM_PLUS_API)
   });
 
 };

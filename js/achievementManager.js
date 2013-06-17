@@ -121,7 +121,7 @@ achManager.submitProgress = function(achId, amount)
 
 achManager.unlockAchievement = function(achId)
 {
-  var request = gapi.client.games.achievements.increment(
+  var request = gapi.client.games.achievements.unlock(
       {achievementId: achId}
   );
   request.execute(function(response) {

@@ -48,30 +48,28 @@ friendsTable.loadUpFriends = function(pageNum)
   }
 
   // For an interesting twist, try changing this to 'best'
-  var paramsObject = {'orderBy' : 'alphabetical',
-                      'maxResults': 20};
+  var paramsObject = {collection: 'visible',
+                      orderBy : 'alphabetical',
+                      userId : 'me',
+                      maxResults: 20};
   if (optionalPageToken) paramsObject.pageToken = optionalPageToken;
-  gapi.client.request({
-    path: login.plusPath + '/people/me/people/visible',
-    params: paramsObject,
-    callback: function(data) {
-      console.log('This is friends data: ', data);
-      var $friendTableBody = $('#friendsTable tbody');
-      if (data.hasOwnProperty('items')) {
-        for (var i=0; i<data.items.length; i++) {
-          var $personRow = friendsTable.buildTableRowFromData(data.items[i]);
-          $personRow.appendTo($friendTableBody);
-        }
-        if (data.hasOwnProperty('nextPageToken')) {
-          friendsTable.pageTokens[pageNum + 1] = data.nextPageToken;
-        }
-        friendsTable.refreshPageButtons();
+
+  var request = gapi.client.plus.people.list(paramsObject);
+  request.execute(function(response) {
+    console.log('This is friends data: ', response);
+    var $friendTableBody = $('#friendsTable tbody');
+    if (response.hasOwnProperty('items')) {
+      for (var i=0; i<response.items.length; i++) {
+        var $personRow = friendsTable.buildTableRowFromData(response.items[i]);
+        $personRow.appendTo($friendTableBody);
       }
-      $('#friends').fadeIn();
+      if (response.hasOwnProperty('nextPageToken')) {
+        friendsTable.pageTokens[pageNum + 1] = response.nextPageToken;
+      }
+      friendsTable.refreshPageButtons();
     }
+    $('#friends').fadeIn();
   });
-
-
 };
 
 friendsTable.refreshPageButtons = function()
