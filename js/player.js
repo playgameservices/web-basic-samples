@@ -32,7 +32,6 @@ player.loadLocalPlayer = function() {
   request.execute(function(response) {
     console.log('This is who you are ', response);
     $('#welcome #message').text('Welcome, ' + response.displayName + '!');
-    $('#logoutLink').show();
     player.displayName = response.displayName;
     player.profileUrl = response.avatarImageUrl;
     player.userId = response.playerId;
