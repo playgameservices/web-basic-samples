@@ -82,6 +82,15 @@ welcome.activateButtonsIfReady = function()
 
 };
 
+welcome.userSignOut = function() {
+  welcome.leaderboards_loaded = false;
+  welcome.achievement_defs_loaded = false;
+  welcome.achievement_progress_loaded = false;
+  welcome.player_data_loaded = false;
+  welcome.challenge_loaded = false;
+  $('#welcome input').attr('disabled',true);
+  $('#welcome').fadeOut();
+};
 
 welcome.loadUp = function() {
   $('#welcome').fadeIn();
@@ -91,7 +100,6 @@ welcome.loadUp = function() {
 welcome.showAchievements = function() {
   $('#welcome').fadeOut();
   achievementTable.loadUp();
-
 };
 
 welcome.showLeaderboards = function() {
@@ -113,3 +121,4 @@ welcome.showAdmin = function() {
   $('#welcome').fadeOut();
   admin.loadUp();
 };
+

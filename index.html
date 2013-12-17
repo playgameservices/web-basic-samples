@@ -3,6 +3,11 @@
 <head>
   <title></title>
   <link rel="stylesheet" href="css/style.css">
+    <meta name="google-signin-requestvisibleactions" content="https://schemas.google.com/AddActivity" />
+    <meta name="google-signin-clientid" content="123456789012.apps.googleusercontent.com" />
+    <meta name="google-signin-cookiepolicy" content="single_host_origin" />
+    <meta name="google-signin-callback" content="signinCallback" />
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/games https://www.googleapis.com/auth/plus.login" />
 </head>
 <body>
   <header>
@@ -18,6 +23,7 @@
         <input type="button" id="playGameHard" disabled="true" value="Play Game (Hard)" onclick="welcome.startGame(game.HARD)" />
         <input type="button" id="seeFriends" disabled="true" value="See my friends!" onclick="welcome.seeFriends()" />
         <input type="button" id="showAdmin" disabled="true" value="Admin tasks" onclick="welcome.showAdmin()" />
+        <input type="button" id="logoutButton" disabled="true" value="Log out" onclick="login.logout()" />
       </div>
 
       <div id="game" style="display:none;">
@@ -133,10 +139,11 @@
 
   <!-- JavaScript at the bottom for fast page loading -->
   <script>
-    var apisLoaded = function() {
-      console.log("Ready to init");
-      login.init();
-    }
+
+   // This call is specified by the google-signin-callback in our meta tag
+   var signinCallback = function(auth) {
+      login.handleAuthResult(auth)
+   }
   </script>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -160,7 +167,7 @@
   <script src="js/welcome.js"></script>
 
   <!-- Start the process of loading the Google JavaScript client library -->
-  <script src="https://apis.google.com/js/client:plusone.js?onload=apisLoaded"></script>
+  <script src="https://apis.google.com/js/client:plusone.js"></script>
 
   <!-- end scripts -->
 

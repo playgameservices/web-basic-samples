@@ -41,3 +41,8 @@ player.loadLocalPlayer = function() {
   });
 };
 
+player.clearData = function() {
+  player.displayName = '';
+  player.profileUrl = '';
+  player.userId = '';
+};

@@ -50,6 +50,11 @@ achManager.loadData = function() {
   });
 };
 
+achManager.clearData = function() {
+  achManager.achievements = {};
+  achManager.preloaded = false;
+};
+
 achManager.loadAchievementsEarnedByPlayer = function() {
   var request = gapi.client.games.achievements.list({playerId: 'me'});
   request.execute(function(response) {

@@ -70,6 +70,13 @@ challenge.generateChallenge = function()
 
 };
 
+challenge.clearData = function() {
+  challenge.isActive = false;
+  challenge.scoreToBeat = 0;
+  challenge.challenger = "";
+  challenge.difficulty = 0;
+}
+
 challenge.resetIncomingChallenge = function() {
   challenge.challenger = "";
   challenge.difficulty = 0;

@@ -38,6 +38,10 @@ friendsTable.showPrev = function() {
   friendsTable.loadUpFriends(friendsTable.currPage - 1);
 };
 
+friendsTable.clearData = function() {
+  friendsTable.clearOut();
+};
+
 friendsTable.loadUpFriends = function(pageNum)
 {
   friendsTable.clearOut();

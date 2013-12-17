@@ -47,6 +47,11 @@ leadManager.preloadData = function() {
   });
 };
 
+leadManager.clearData = function() {
+  leadManager.leaderboards = {};
+  leadManager.preloaded = false;
+};
+
 leadManager.getLeaderboardObject = function(leadId)
 {
   return leadManager.leaderboards[leadId];

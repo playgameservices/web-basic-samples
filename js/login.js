@@ -24,18 +24,6 @@
 
 var login = login || {};
 
-
-login.userId = '';
-login.loggedIn = false;
-
-
-login.scopes = 'https://www.googleapis.com/auth/games';
-
-login.init = function() {
-  // Need to add this 1 ms timeout to work around an odd but annoying bug
-  window.setTimeout(login.trySilentAuth, 1);
-};
-
 /**
  * This function allows us to load up the game service via the discovery doc
  * and makes calls directly through the client library instead of needing
@@ -67,26 +55,30 @@ login.loadClient = function() {
 
 
 login.handleAuthResult = function(auth) {
-  console.log('We are in handle auth result');
-  if (auth) {
-    console.log('Hooray! You\'re logged in!');
+  console.log('We are in handle auth result', auth);
+  if (auth && auth.error == null) {
+    console.log('Hooray! You\'re logged in! ', auth );
     $('#loginDiv').fadeOut();
     login.loadClient();
-
   } else {
     $('#loginDiv').fadeIn();
   }
 };
 
 
-login.trySilentAuth = function() {
-  console.log('Trying silent auth');
-  gapi.auth.authorize({client_id: constants.CLIENT_ID, scope: login.scopes, immediate: true}, login.handleAuthResult);
-};
-
 login.showLoginDialog=function() {
-  gapi.auth.authorize({client_id: constants.CLIENT_ID, scope: login.scopes, immediate: false}, login.handleAuthResult);
+  console.log('Trying not-so-silent auth');
+  gapi.auth.signIn();
 };
 
-
+login.logout = function() {
+  gapi.auth.signOut();
+  achManager.clearData();
+  friendsTable.clearData();
+  leadManager.clearData();
+  challenge.clearData();
+  player.clearData();
+  welcome.userSignOut();
+  $('#loginDiv').fadeIn();
+};
 
