@@ -61,6 +61,9 @@ login.handleAuthResult = function(auth) {
     $('#loginDiv').fadeOut();
     login.loadClient();
   } else {
+    if (auth && auth.hasOwnProperty('error')) {
+      console.log('Login failed because: ', auth.error);
+    }
     $('#loginDiv').fadeIn();
   }
 };
