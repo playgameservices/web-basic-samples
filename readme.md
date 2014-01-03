@@ -139,3 +139,4 @@ the location from which you are serving your application.
 * "Incremental" achievement progress doesn't get updated locally
 
 
+[![Analytics](https://ga-beacon.appspot.com/UA-46743168-1/playgameservices/type-a-number-js)](https://github.com/playgameservices/type-a-number-js)
