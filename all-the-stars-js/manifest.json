@@ -1,0 +1,22 @@
+{
+  "name": "Collect All the Stars!",
+  "version": "1",
+  "icons": { "128": "img/star-128x128.png" },
+  "manifest_version": 2,
+  "minimum_chrome_version": "28",
+  "app": {
+    "background": {
+      "scripts": ["js/main.js"]
+    }
+  },
+  "permissions": [
+    "identity"
+  ],
+  "oauth2": {
+    "client_id": "111111111111-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/games",
+      "https://www.googleapis.com/auth/appstate"
+    ]
+  }
+}
