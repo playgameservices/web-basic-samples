@@ -28,7 +28,7 @@ model.INVENTORY_SLOT = 0;
 model.lastCloudSaveVersion = '';
 
 model.loadCloudSave = function(callback) {
-  console.log("Loding cloud save data");
+  console.log("Loading cloud save data");
   gapi.client.request({
     path: login.appStatePath + '/states/' + model.INVENTORY_SLOT,
     callback: function(response, rawResponse) {
