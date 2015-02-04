@@ -49,13 +49,24 @@ login.handleAuthResult = function(auth) {
   }
 };
 
-
 login.trySilentAuth = function() {
   console.log('Trying silent auth');
-  gapi.auth.authorize({client_id: constants.CLIENT_ID, scope: login.scopes, immediate: true}, login.handleAuthResult);
+  gapi.auth.authorize(
+      {
+        client_id: constants.CLIENT_ID,
+        scope: login.scopes,
+        immediate: true
+      },
+      login.handleAuthResult);
 };
 
 login.showLoginDialog=function() {
-  gapi.auth.authorize({client_id: constants.CLIENT_ID, scope: login.scopes, immediate: false}, login.handleAuthResult);
+  gapi.auth.authorize(
+      {
+        client_id: constants.CLIENT_ID,
+        scope: login.scopes,
+        immediate: false
+      },
+      login.handleAuthResult);
 };
 
