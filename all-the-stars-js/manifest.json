@@ -10,7 +10,9 @@
     }
   },
   "permissions": [
-    "identity"
+    "identity",
+    "identity.email",
+    "https://accounts.google.com/"
   ],
   "oauth2": {
     "client_id": "111111111111-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.apps.googleusercontent.com",

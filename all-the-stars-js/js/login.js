@@ -26,7 +26,7 @@ var login = login || {};
 
 login.userId = '';
 login.loggedIn = false;
-
+login.authToken = null;
 
 login.scopes = 'https://www.googleapis.com/auth/games https://www.googleapis.com/auth/appstate';
 login.basePath = '/games/v1';
@@ -39,13 +39,18 @@ login.init = function() {
 
 login.handleAuthResult = function(auth) {
   console.log('We are in handle auth result');
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError.message);
+  }
   if (auth) {
     console.log('Hooray! You\'re logged in!');
-    $('#loginDiv').fadeOut();
-    player.loadLocalPlayer();
+    // Show the PGS splash screen.
+    login.authToken = auth;
+    pgs.showSplashscreen();
+    player.loadLocalPlayer().then(pgs.showToast.bind(null, player));
     game.init();
   } else {
-    $('#loginDiv').fadeIn();
+    login.showLoginDialog();
   }
 };
 
@@ -69,4 +74,3 @@ login.showLoginDialog=function() {
       },
       login.handleAuthResult);
 };
-

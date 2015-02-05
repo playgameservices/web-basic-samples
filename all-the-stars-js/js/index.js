@@ -33,6 +33,7 @@ window.addEventListener('load', function() {
   document.querySelector("#level12").onclick = function () { game.levelClick(12); };
   document.querySelector("#saveToCloud").onclick = game.saveToCloud;
   document.querySelector("#loadCloudSave").onclick = game.loadCloudSave;
+  document.querySelector("#logout").onclick = pgs.showLogoutDialog;
 });
 
 window.gapiIsLoaded = function() {

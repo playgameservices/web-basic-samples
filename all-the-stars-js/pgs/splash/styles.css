@@ -1,0 +1,104 @@
+body {
+  background-color: lightgray;
+  margin: 0px;
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  src: url("/pgs/res/Roboto-Regular.ttf");
+}
+
+.splash-screen {
+  background-color: #b2cb39;
+  color: white;
+  font-family: "Roboto";
+  font-size: 30px;
+  height: 210px;
+  position:relative;
+  text-align: center;
+  width: 420px;
+}
+
+.container:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  margin-right: -0.25em; /* Adjusts for spacing */
+  vertical-align: middle;
+}
+
+.play-games {
+  background-image: url("/pgs/res/games_controller_white_100.png");
+  height: 100px;
+  margin-top: -18px;
+  width: 100px;
+}
+
+.app {
+  background-color: lightgray;
+  border-radius: 10px;
+  border: 2px solid gray;
+  height: 80px;
+  margin-top: 40px;
+  width: 80px;
+}
+
+.icon {
+  background-repeat: no-repeat;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.pg-text {
+  margin-left: 6px;
+}
+
+.vert-center {
+  display: inline-block;
+  vertical-align:middle;
+}
+
+.horiz-center {
+  align-items: baseline;
+  display:flex;
+  justify-content:center;
+}
+
+.google-icon {
+  vertical-align: middle;
+  width: 100px;
+}
+
+.game-splash {
+  background-color: white;
+  color: grey;
+  height: 170px;
+  position: absolute;
+  top: 0px;
+  transition: top 200ms;
+  width: 100%;
+  z-index: 1;
+}
+
+.game-splash.hidden {
+  top: -170px;
+}
+
+.connecting-to {
+  background-color: #8bc34a;
+  bottom:0px;
+  font-size:20px;
+  height: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  position: absolute;
+  transition: bottom 200ms;
+  width: 100%;
+  z-index: 1;
+}
+
+.connecting-to.hidden {
+  bottom: -40px;
+}
