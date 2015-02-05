@@ -23,8 +23,8 @@
 
 var login = login || {};
 
-
 login.userId = '';
+login.clientId = '';
 login.loggedIn = false;
 login.authToken = null;
 
@@ -33,6 +33,10 @@ login.basePath = '/games/v1';
 login.appStatePath = '/appstate/v1';
 
 login.init = function() {
+  // Read oauth client id from the manifest (needed for login)
+  var manifest = chrome.runtime.getManifest();
+  login.clientId = manifest.oauth2.client_id;
+
   // Need to add this 1 ms timeout to work around an odd but annoying bug
   window.setTimeout(login.trySilentAuth, 1);
 };
@@ -58,7 +62,7 @@ login.trySilentAuth = function() {
   console.log('Trying silent auth');
   gapi.auth.authorize(
       {
-        client_id: constants.CLIENT_ID,
+        client_id: login.clientId,
         scope: login.scopes,
         immediate: true
       },
@@ -68,7 +72,7 @@ login.trySilentAuth = function() {
 login.showLoginDialog=function() {
   gapi.auth.authorize(
       {
-        client_id: constants.CLIENT_ID,
+        client_id: login.clientId,
         scope: login.scopes,
         immediate: false
       },
