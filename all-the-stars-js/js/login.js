@@ -41,20 +41,25 @@ login.init = function() {
   window.setTimeout(login.trySilentAuth, 1);
 };
 
-login.handleAuthResult = function(auth) {
+login.handleAuthResult = function(silent, auth) {
   console.log('We are in handle auth result');
   if (chrome.runtime.lastError) {
-    console.error(chrome.runtime.lastError.message);
+    console.log(chrome.runtime.lastError.message);
   }
   if (auth) {
     console.log('Hooray! You\'re logged in!');
     // Show the PGS splash screen.
     login.authToken = auth;
+    login.loggedIn = true;
     pgs.showSplashscreen();
     player.loadLocalPlayer().then(pgs.showToast.bind(null, player));
     game.init();
-  } else {
+  } else if (silent) {
+    // If silent auth failed, try showing the login dialog.
     login.showLoginDialog();
+  } else {
+    // User did not grant login.  Just start the game without login.
+    game.init();
   }
 };
 
@@ -66,7 +71,7 @@ login.trySilentAuth = function() {
         scope: login.scopes,
         immediate: true
       },
-      login.handleAuthResult);
+      login.handleAuthResult.bind(null, true));
 };
 
 login.showLoginDialog=function() {
@@ -76,5 +81,25 @@ login.showLoginDialog=function() {
         scope: login.scopes,
         immediate: false
       },
-      login.handleAuthResult);
+      login.handleAuthResult.bind(null, false));
+};
+
+login.revokeAuth = function() {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    var url = "https://accounts.google.com/o/oauth2/revoke?token=" +
+        login.authToken.access_token;
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        console.log('Logout successful!');
+        chrome.identity.removeCachedAuthToken(
+            {token: login.authToken.access_token},
+            resolve);
+        login.loggedIn = false;
+      }
+    };
+    console.log('Sending logout request');
+    xhr.open("GET", url);
+    xhr.send(null);
+  });
 };

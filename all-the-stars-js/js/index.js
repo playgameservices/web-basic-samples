@@ -31,6 +31,7 @@ window.addEventListener('load', function() {
   document.querySelector("#level10").onclick = function () { game.levelClick(10); };
   document.querySelector("#level11").onclick = function () { game.levelClick(11); };
   document.querySelector("#level12").onclick = function () { game.levelClick(12); };
+  document.querySelector("#loginButton").onclick = login.init;
   document.querySelector("#saveToCloud").onclick = game.saveToCloud;
   document.querySelector("#loadCloudSave").onclick = game.loadCloudSave;
   document.querySelector("#logout").onclick = pgs.showLogoutDialog;

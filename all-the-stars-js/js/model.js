@@ -44,7 +44,7 @@ model.loadCloudSave = function(callback) {
           model.inv.loadDataFromCloud(response.data);
           model.lastCloudSaveVersion = response.currentStateVersion;
         } else {
-          console.log("This was not the response I expected.");
+          // Loading the game failed.  This occurs if the user didn't log in.
           model.inv.loadEmpty();
         }
       }

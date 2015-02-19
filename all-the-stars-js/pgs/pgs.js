@@ -85,7 +85,8 @@ pgs.showLogoutDialog = function() {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
                 if (request.confirmLogout) {
-                  window.close();
+                  login.revokeAuth()
+                      .then(game.init);
                 }
               });
           appWindow.contentWindow.player = player;
