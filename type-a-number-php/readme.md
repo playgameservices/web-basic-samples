@@ -102,10 +102,10 @@ on the topic.)
 To run this sample application in your own environment, perform the following
 steps:
 
-1. Get the latest [Google APIs Client Library for PHP](https://code.google.com/p/google-api-php-client/)
+1. Get the latest [Google APIs Client Library for PHP](https://github.com/google/google-api-php-client)
 and extract it into your `server` directory.
-  + We recommend you retrieve this using `svn`, to ensure you always have the
-  latest version. (e.g. `svn checkout http://google-api-php-client.googlecode.com/svn/trunk/ google-api-php-client`)
+  + We recommend you retrieve this using `git`, to ensure you always have the
+  latest version. (e.g. `git clone https://github.com/google/google-api-php-client`)
   + Alternately, you can get the gzip file from the downloads page.
   Please make sure you download version 0.6.2 or later (updated June 3, 2013),
   as the `GameService` contrib file does not exist in earlier versions.
