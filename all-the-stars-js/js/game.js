@@ -32,13 +32,6 @@ game.currentWorld = 1;
 
 game.init = function() {
   $('#game').fadeIn();
-  if (login.loggedIn) {
-    $('#loadSave').fadeIn();
-    $('#login').fadeOut();
-  } else {
-    $('#loadSave').fadeOut();
-    $('#login').fadeIn();
-  }
   game.refreshInterface();
   model.loadCloudSave(game.refreshInterface);
 };

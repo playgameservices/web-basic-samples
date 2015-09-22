@@ -68,26 +68,5 @@ var addFifeSize = function(url) {
 
 // Retrieves a player's profile image via xhr.
 player.getProfileImg = function() {
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', addFifeSize(player.profileUrl), true);
-    xhr.responseType = 'blob';
-
-    xhr.onload = function(e) {
-      if (this.status == 200) {
-        var blob = this.response;
-        var img = document.createElement('img');
-        img.onload = function(e) {
-          // Clean up.
-          window.URL.revokeObjectURL(img.src);
-        };
-        img.src = window.URL.createObjectURL(blob);
-        resolve(img);
-      } else {
-        reject(this.status);
-      }
-    };
-
-    xhr.send();
-  });
+  return pgs.util.getImg(addFifeSize(player.profileUrl));
 };

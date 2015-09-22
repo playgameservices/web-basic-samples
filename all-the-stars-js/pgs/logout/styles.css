@@ -12,7 +12,7 @@ body {
 }
 
 h1 {
-  background-color: #62cb49;
+  background-color: #b2cb39;
   color: white;
   font-size: large;
   font-weight: 100;
@@ -28,16 +28,6 @@ p {
   text-overflow: ellipsis;
 }
 
-.header {
-  background-color: #b2cb39;
-  color: white;
-  font-size: 30px;
-  height: 210px;
-  position:relative;
-  text-align: center;
-  width: 420px;
-}
-
 .icon {
   height:30px;
   margin: 5px;
@@ -45,8 +35,8 @@ p {
 }
 
 .icon-container {
-  background-color:green;
-  border-radius:50%;
+  background-color: #92ab1c;
+  border-radius: 50%;
   float: right;
   height: 40px;
   margin: 10px;

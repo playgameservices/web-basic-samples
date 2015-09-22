@@ -38,27 +38,27 @@
     margin-top: 8px;
 }
 
-.welcome {
+.toast-title {
     font-size:12px;
 }
 
-.player-name {
+.toast-message {
     color: gray;
     font-size: 18px;
     height: 1.2em; /* 1.2 allows for descenders */
-    max-width: 7em;
+    max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.player-icon {
-    background-color: white;
+.toast-icon {
+    background-color: gray;
     border-radius: 50%;
     float:left;
     height: 46px;
-    padding: 3px;
     width: 46px;
+    border: solid white 3px;
 }
 
 .pgs-icon {

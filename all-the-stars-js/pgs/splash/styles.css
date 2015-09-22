@@ -4,15 +4,15 @@ body {
 }
 
 @font-face {
-  font-family: "Roboto";
+  font-family: "Roboto-light";
   font-style: normal;
-  src: url("/pgs/res/Roboto-Regular.ttf");
+  src: url("/pgs/res/Roboto-Light.ttf");
 }
 
 .splash-screen {
   background-color: #b2cb39;
   color: white;
-  font-family: "Roboto";
+  font-family: "Roboto-light";
   font-size: 30px;
   height: 210px;
   position:relative;
@@ -87,7 +87,7 @@ body {
 }
 
 .connecting-to {
-  background-color: #8bc34a;
+  background-color: #b2cb39;
   bottom:0px;
   font-size:20px;
   height: 20px;

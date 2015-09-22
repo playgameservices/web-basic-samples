@@ -120,12 +120,30 @@ model.saveToCloud = function(callback) {
   });
 };
 
-
-
 model.getStarsFor = function(world, level) {
   return model.inv.getStarsFor(world, level);
 };
 
 model.setStarsFor = function(world, level, newNum){
   model.inv.setStarsFor(world, level, newNum);
+  // Activate achievements when the user reaches a predetermined number of 
+  // stars.  Mapping achievement IDs to more meaningful constants for 
+  // readability is left as an exercise for the reader.
+  switch (model.inv.countMyStars()) {
+  case 8:
+    pgs.achievements.unlock('CgkImq-v4t4UEAIQAQ');
+    break;
+  case 16:
+    pgs.achievements.unlock('CgkImq-v4t4UEAIQAg');
+    break;
+  case 32:
+    pgs.achievements.unlock('CgkImq-v4t4UEAIQAw');
+    break;
+  case 64:
+    pgs.achievements.unlock('CgkImq-v4t4UEAIQBA');
+    break;
+  case 128:
+    pgs.achievements.unlock('CgkImq-v4t4UEAIQBQ');
+    break;
+  }
 };

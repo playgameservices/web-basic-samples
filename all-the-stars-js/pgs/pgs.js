@@ -43,8 +43,9 @@ pgs.showSplashscreen = function() {
       });
 };
 
-// Shows a toast to notify the player of login.
-pgs.showToast = function(player) {
+pgs.toast = {};
+
+pgs.toast.login = function(player) {
   var link = document.querySelector('link[rel="import"]');
   var content = link.import;
 
@@ -53,19 +54,85 @@ pgs.showToast = function(player) {
   var toast = el.cloneNode(true);
   document.body.appendChild(toast);
 
-  // Customize the toast with the player's name and profile image.
-  var playerName = document.createTextNode(player.displayName);
-  toast.querySelector('#player-name').appendChild(playerName);
+  pgs.toast.title = document.createTextNode('');
+  toast.querySelector('#title').appendChild(pgs.toast.title);
+
+  pgs.toast.message = document.createTextNode('');
+  toast.querySelector('#message').appendChild(pgs.toast.message);
+
+  pgs.toast.icon = toast.querySelector('#icon-container');
+
   player.getProfileImg()
       .then(
           function(img) {
-            img.className = "player-icon";
-            toast.querySelector('#profile-pic').appendChild(img);
-            // Show the toast.
-            toast = document.getElementsByClassName('toast')[0];
-            toast.classList.add('shown');
-            setTimeout(function() { toast.classList.remove('shown'); }, 6000);
-          });
+            img.className = 'toast-icon';
+            pgs.toast.playerIcon = img;
+            pgs.toast.icon.appendChild(img);
+            pgs.toast.show('WELCOME', player.displayName);
+  });
+};
+
+pgs.toast.fitMsg_ = function(node) {
+  var fontsize = 18;
+  node.style.fontSize = fontsize + 'px';
+  while (fontsize >=13 && node.scrollWidth > node.clientWidth) {
+    fontsize--;
+    node.style.fontSize = fontsize + 'px';
+  }
+};
+
+pgs.util = {};
+
+pgs.util.getImg = function(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';
+
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        var blob = this.response;
+        var img = document.createElement('img');
+        img.onload = function(e) {
+          // Clean up.
+          window.URL.revokeObjectURL(img.src);
+        };
+        img.src = window.URL.createObjectURL(blob);
+        resolve(img);
+      } else {
+        reject(this.status);
+      }
+    };
+
+    xhr.send();
+  });
+};
+
+pgs.toast.getIcon_ = function(opt_iconUrl) {
+  if (opt_iconUrl) {
+    return pgs.util.getImg(opt_iconUrl)
+        .then(function(icon) {
+          icon.className = 'toast-icon';
+          return icon;
+        });
+  } else {
+    return Promise.resolve(pgs.toast.playerIcon);
+  }
+};
+
+// Shows a toast to notify the player of login.
+pgs.toast.show = function(title, message, opt_iconUrl) {
+  pgs.toast.title.nodeValue = title;
+  pgs.toast.message.nodeValue = message;
+  pgs.toast.fitMsg_(pgs.toast.message.parentNode);
+
+  pgs.toast.getIcon_(opt_iconUrl).then(function(icon){
+    pgs.toast.icon.replaceChild(icon, pgs.toast.icon.firstChild);
+
+    var toast = document.getElementsByClassName('toast')[0];
+    toast.classList.add('shown');
+    setTimeout(function() { toast.classList.remove('shown'); }, 6000);
+  });
 };
 
 // Shows a dialog that enables the player to log out of PGS.
@@ -85,8 +152,7 @@ pgs.showLogoutDialog = function() {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
                 if (request.confirmLogout) {
-                  login.revokeAuth()
-                      .then(game.init);
+                  window.close();
                 }
               });
           appWindow.contentWindow.player = player;
@@ -96,4 +162,59 @@ pgs.showLogoutDialog = function() {
           console.error(chrome.runtime.lastError);
         }
       });
+};
+
+
+pgs.achievements = {};
+
+pgs.achievements.path = '/games/v1/achievements';
+
+/**
+ * A map of AchievementId to AchievementDefinition.  See
+ * https://developers.google.com/games/services/web/api/achievementDefinitions/list
+ * for details.
+ */
+pgs.achievements.all = {};
+
+/**
+ * Downloads the list of achievements from PGS.  This must be called before
+ * achievements can be unlocked.
+ */
+pgs.achievements.initialize = function() {
+  return new Promise(function(resolve, reject) {
+    gapi.client.request({
+      path: pgs.achievements.path,
+      callback: function(response) {
+        if (response.kind === 'games#achievementDefinitionsListResponse') {
+          for (var i = 0; i < response.items.length; i++) {
+            pgs.achievements.all[response.items[i].id] = response.items[i];
+          }
+        }
+      }
+    });
+  });
+};
+
+/**
+ * Unlocks an achievement.  The ID that is passed must exist in the
+ * pgs.achievements.all list.
+ */
+pgs.achievements.unlock = function(id) {
+  return new Promise(function(resolve, reject) {
+    gapi.client.request({
+      path: pgs.achievements.path + '/' + id + '/unlock',
+      method: 'POST',
+      callback: function(response) {
+        if (response.kind === 'games#achievementUnlockResponse') {
+          if (response.newlyUnlocked || true) {
+            // Show a toast for newly unlocked achievements.
+            pgs.toast.show('Achievement Unlocked',
+              pgs.achievements.all[id].name,
+              pgs.achievements.all[id].unlockedIconUrl);
+          }
+        }
+        resolve();
+      }
+    });
+  });
 };
