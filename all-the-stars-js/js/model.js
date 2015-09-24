@@ -27,6 +27,12 @@ model.inv = new Inventory();
 model.INVENTORY_SLOT = 0;
 model.lastCloudSaveVersion = '';
 
+/**
+ * Note that the states APIs used in this file are deprecated.
+ * Clients wishing to implement saved game functionality should
+ * instead use the Saved Games API described here:
+ * https://developers.google.com/games/services/common/concepts/savedgames?hl=en
+ */
 model.loadCloudSave = function(callback) {
   console.log("Loading cloud save data");
   gapi.client.request({
