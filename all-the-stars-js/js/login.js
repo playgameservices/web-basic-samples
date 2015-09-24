@@ -51,6 +51,7 @@ login.handleAuthResult = function(auth) {
     // Show the PGS splash screen.
     login.authToken = auth;
     pgs.showSplashscreen();
+    // Once player info is loaded, show a login toast.
     player.loadLocalPlayer().then(pgs.toast.login.bind(null, player));
     pgs.achievements.initialize();
     game.init();

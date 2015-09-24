@@ -43,6 +43,36 @@ pgs.showSplashscreen = function() {
       });
 };
 
+// Shows a dialog that enables the player to log out of PGS.
+pgs.showLogoutDialog = function() {
+  var windowOptions = {
+    bounds: {width: 315, height:210},
+    frame: 'none',
+    hidden: true,
+    resizable: false
+  };
+
+  chrome.app.window.create(
+      'pgs/logout/logout.html',
+      windowOptions,
+      function(appWindow) {
+        if (appWindow) {
+          chrome.runtime.onMessage.addListener(
+              function(request, sender, sendResponse) {
+                if (request.confirmLogout) {
+                  window.close();
+                }
+              });
+          appWindow.contentWindow.player = player;
+          appWindow.contentWindow.authToken = login.authToken;
+          appWindow.show();
+        } else {
+          console.error(chrome.runtime.lastError);
+        }
+      });
+};
+
+
 pgs.toast = {};
 
 pgs.toast.login = function(player) {
@@ -81,33 +111,6 @@ pgs.toast.fitMsg_ = function(node) {
   }
 };
 
-pgs.util = {};
-
-pgs.util.getImg = function(url) {
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'blob';
-
-    xhr.onload = function(e) {
-      if (this.status == 200) {
-        var blob = this.response;
-        var img = document.createElement('img');
-        img.onload = function(e) {
-          // Clean up.
-          window.URL.revokeObjectURL(img.src);
-        };
-        img.src = window.URL.createObjectURL(blob);
-        resolve(img);
-      } else {
-        reject(this.status);
-      }
-    };
-
-    xhr.send();
-  });
-};
-
 pgs.toast.getIcon_ = function(opt_iconUrl) {
   if (opt_iconUrl) {
     return pgs.util.getImg(opt_iconUrl)
@@ -133,35 +136,6 @@ pgs.toast.show = function(title, message, opt_iconUrl) {
     toast.classList.add('shown');
     setTimeout(function() { toast.classList.remove('shown'); }, 6000);
   });
-};
-
-// Shows a dialog that enables the player to log out of PGS.
-pgs.showLogoutDialog = function() {
-  var windowOptions = {
-    bounds: {width: 315, height:210},
-    frame: 'none',
-    hidden: true,
-    resizable: false
-  };
-
-  chrome.app.window.create(
-      'pgs/logout/logout.html',
-      windowOptions,
-      function(appWindow) {
-        if (appWindow) {
-          chrome.runtime.onMessage.addListener(
-              function(request, sender, sendResponse) {
-                if (request.confirmLogout) {
-                  window.close();
-                }
-              });
-          appWindow.contentWindow.player = player;
-          appWindow.contentWindow.authToken = login.authToken;
-          appWindow.show();
-        } else {
-          console.error(chrome.runtime.lastError);
-        }
-      });
 };
 
 
@@ -216,5 +190,33 @@ pgs.achievements.unlock = function(id) {
         resolve();
       }
     });
+  });
+};
+
+
+pgs.util = {};
+
+pgs.util.getImg = function(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';
+
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        var blob = this.response;
+        var img = document.createElement('img');
+        img.onload = function(e) {
+          // Clean up.
+          window.URL.revokeObjectURL(img.src);
+        };
+        img.src = window.URL.createObjectURL(blob);
+        resolve(img);
+      } else {
+        reject(this.status);
+      }
+    };
+
+    xhr.send();
   });
 };
