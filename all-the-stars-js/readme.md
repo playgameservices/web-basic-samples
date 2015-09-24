@@ -25,7 +25,6 @@ data without requiring an explicit action from your user.
 You can find the code that runs the game in the `js` directory. The following
 files are located there:
 
-* `constants.js` contains the OAuth 2.0 client ID
 * `game.js` handles the simple game logic and the button display
 * `index.js` registers click handlers for index.html. It is not inline to meet
   content security policy of chrome packaged apps.
@@ -38,79 +37,64 @@ files are located there:
 * `player.js` simply handles loading the player information so we can say hello.
 
 
-## Running the sample application
-
-To run Collect All the Stars on your own server, you will need to create
-your own version of the game in the Play Console. Once you have done that,
-you will copy over your application and client IDs into your
-`js/constants.js` file. To follow this process, perform the following steps:
-
-1. Create your own application in the Play Console, as described in our [Developer
-Documentation](https://developers.google.com/games/services/console/enabling). Make
-sure you follow the "Web" instructions for creating your Client ID and linking
-your application.
-2. If you have already created this application in the Play Console (because you
-have created and run the Android or iOS version of the gamne, for example), you
-can re-use your current version of the game. You just need to...
-    * Link the web version of your game, as described in the "Link Your Platform-
-    Specific Apps" section of the console documentation
-    * Create a separate Client ID for the web version of the game, as described in
-    the "Create a Client ID" section of the Console documentation.
-3. Make a note of your Client ID and Application ID as described in the
-documentation
-4. Replace some of the constants defined in the application.
-    * In the `constants.js` file, replace the following constants:
-        * `constants.CLIENT_ID` (Replace this with your OAuth2.0 Client ID)
-
-That's it! Your application should be ready to run! (This application does
-not make use of achievements or leaderboards)
-
-That's it! Your application should be ready to run!
-
 ## Running the sample as a Chrome Packaged App
 
 [Chrome Packaged Apps](https://developer.chrome.com/apps) enable apps to be
-written using HTML/JS/CSS, and this sample can be run with identical source
-for both hosted and packaged apps.
+written using HTML/JS/CSS.  To begin, you will need to create your own version
+of the game in the Play Console. Once you have done that, you will create a
+Chrome Webstore entry for your application and place the resulting client IDs
+and keys into your `manifest.json` file. To follow this process, perform the
+following steps:
 
-1. Follow steps for running the sample application on a hosted server.
-2. From the [Google API console](https://code.google.com/apis/console)
-  `API Access` section, create a client ID for a chrome app. See
-  [Chrome Apps Identity](https://developer.chrome.com/apps/app_identity.html)
-  for how to obtain a stable app ID by adding a `key` to `manifest.json`.
-3. Edit the `manifest.json` file and add your client ID from the API console.
+1. Follow the
+   [packaging instructions](https://developer.chrome.com/extensions/packaging#creating)
+   to locally package your copy of all-the-stars.  You will end up with a crx
+   file and a key file.  Note the instructions on the latter half of the page
+   for uploading the crx to the Web Store; you'll need those later when you want
+   to publish your game.
+2. Load the crx into chrome.  You can do this by going to the
+   chrome://extensions page and dragging the crx that was created in Step 1 into
+   Chrome.
+3. Find the new entry on the extensions page for your app, and note the ID.  It
+   will be a long string of letters, like "cfhblmkcgnkbkbobakpeikejjgjjlfhi".
+4. Create your application in the Play Console, as described in our [Developer
+   Documentation](https://developers.google.com/games/services/console/enabling).
+   If you have already created this application in the Play Console (because you
+   have created and run the Android or iOS version of the gamne, for example), you
+   can re-use your current version of the game.
+5. Link your chrome app to your new PGS entry.
+    * On the "Linked apps" section, click "Chrome" to link a chrome app.
+    * Under "Chrome Application ID", enter the app ID from step 3.
+6. Authorize your app and get a client ID.
+    * Click "Authorize Your App" on the next screen.  Confirm that the
+      app ID is correct.
+    * You should see a message noting that your Client ID was successfully
+      linked.  Note the Client ID.  You'll need it for the next step.
+7. Replace the client ID in the application.
+    * In the `manifest.json` file, replace the `oauth2.client_id` with your
+      Client ID from step 6.
+8. Follow the instructions on the
+   [packaging instructions](https://developer.chrome.com/extensions/packaging#creating)
+   page to update your app, now that you have added the client ID.
+9. Load the crx into chrome.
 
 That's it! Your application should be ready to run!
 
 ## Troubleshooting
 
-**I see a some kind of `400 bad request` error in my JavaScript console when
-calling `GET https://accounts.google.com/o/oauth2/auth...`. What does that
-mean?**
+** My application won't allow me to log in!**
 
-This could be due to a number of different causes, but probably the most
-common one is a `redirect_uri_mismatch` error. This happens when the location
-from which you are serving your application doesn't match up with the
-`JavaScript origins:` field in your OAuth2.0 Client ID settings. For instance...
-
- * You're trying to load your app from a "file://" location. (You need to specify
- a http or https origin.)
- * You have your `http://` and `https://` mixed up. (For instance, you're loading
- from `http://localhost/` and you accidentally specified your JavaScript origin as
- `https://localhost`.)
- * Just a plain ol' mismatch. (For instance, you're loading from `http://www.mytestserver.com`
- and you specified your JavaScript origin as `https://localhost`.)
-
-To fix any of these issues...
-
-1. Go to your application in the Play Developer Console's Game services page.
-2. Click the "This game is linked to the API console project called '<Your app
-name>'" link at the bottom of the page. This will take you to the Google
-API Console.
-3. Click on the "API Access" tab on the left.
-4. Find the "Client ID for web applications" section, click on the "Edit Settings..."
-link to the right, and then add or edit your JavaScript origins so they match
-the location from which you are serving your application.
+This is normally the result of some piece of the app identity being out-of-sync.
+* Check that your app ID is correct.
+  * Make sure the app ID listed on the chrome://extensions page matches that
+  listed on the linked app page of your PGS dashboard.  If it doesn't, you may
+  have forgotten to provide the key file when packaging the app.
+* Check that your app's client ID is correct.
+  * If you see oauth failures in the javascript console of your app, you may
+    have the wrong client ID.  Make sure the client ID listed in the
+    `oauth2.client_id` property of your app's manifest.json matches the client
+    ID listed in your PGS dashboard.  Re-package your app and try again.
+* Check that you haven't confused the app ID and the client ID.
 
 ## Known issues
 
