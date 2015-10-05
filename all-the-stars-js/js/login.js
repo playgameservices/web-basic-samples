@@ -28,9 +28,8 @@ login.clientId = '';
 login.loggedIn = false;
 login.authToken = null;
 
-login.scopes = 'https://www.googleapis.com/auth/games https://www.googleapis.com/auth/appstate';
+login.scopes = 'https://www.googleapis.com/auth/games';
 login.basePath = '/games/v1';
-login.appStatePath = '/appstate/v1';
 
 login.init = function() {
   // Read oauth client id from the manifest (needed for login)

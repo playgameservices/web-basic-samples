@@ -28,13 +28,17 @@ files are located there:
 * `game.js` handles the simple game logic and the button display
 * `index.js` registers click handlers for index.html. It is not inline to meet
   content security policy of chrome packaged apps.
-* 'inventory.js` stores the player's inventory, and converts it to a cloud
+* `inventory.js` stores the player's inventory, and converts it to a cloud
   save format (via JSON-encoding and Base64-encoding)
 * `login.js` handles most of the initial login logic
 * `main.js` is used only when packing in a chrome apps to launch the app window.
-* `model.js` handles inventory management and performs all of the interaction
-  with the cloud. This is probably the most interesting file for you to look at
+* `model.js` handles inventory management and player achievements.
 * `player.js` simply handles loading the player information so we can say hello.
+* `pgs/pgs.js` contains code for various PGS elements - login/logout, toasts, achievements, and so on. 
+* `pgs/splash` contains code, styles, and html for the splash screen.
+* `pgs/logout` contains code, styles, and html for the logout screen.
+* `pgs/toast` contains code, styles, and html for toasts.
+* `pgs/res` contains various PGS resources (fonts, icons, etc).
 
 
 ## Running the sample as a Chrome Packaged App

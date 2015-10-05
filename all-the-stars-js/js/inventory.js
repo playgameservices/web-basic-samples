@@ -63,5 +63,5 @@ function Inventory() {
       count += myInv[level];
     }
     return count;
-  }
+  };
 }
