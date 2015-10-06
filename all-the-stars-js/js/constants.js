@@ -17,22 +17,23 @@
 
 "use strict";
 
-var achievements = achievements || [];
+
+var constants = constants || {}
 
 // PGS achievement IDs.  Replace these with the IDs of achievements created in
 // your game's PGS dashboard.  See model.js for code that uses these.
 
 // Achievement for reaching 8 stars.
-achievements[0] = 'CgkImq-v4t4UEAIQAQ';
+constants.ACH_OCTASTAR = 'CgkImq-v4t4UEAIQAQ';
 
 // Achievement for reaching 16 stars.
-achievements[1] = 'CgkImq-v4t4UEAIQAg';
+constants.ACH_HEXADECASTAR = 'CgkImq-v4t4UEAIQAg';
 
 // Achievement for reaching 32 stars.
-achievements[2] = 'CgkImq-v4t4UEAIQAw';
+constants.ACH_DOTRIACONTASTAR = 'CgkImq-v4t4UEAIQAw';
 
 // Achievement for reaching 64 stars.
-achievements[3] = 'CgkImq-v4t4UEAIQBA';
+constants.ACH_TETRAHEXACONTASTAR = 'CgkImq-v4t4UEAIQBA';
 
 // Achievement for reaching 128 stars.
-achievements[4] = 'CgkImq-v4t4UEAIQBQ';
+constants.ACH_OCTAICOSAHECTASTAR = 'CgkImq-v4t4UEAIQBQ';

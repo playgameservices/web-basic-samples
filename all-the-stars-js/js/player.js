@@ -46,7 +46,7 @@ player.loadLocalPlayer = function() {
     });
   });
 
-  var gaiaProfile = new Promise(function(resolve, reject) {
+  var userProfile = new Promise(function(resolve, reject) {
     chrome.identity.getProfileUserInfo(
         function(userInfo) {
           player.email = userInfo.email;
@@ -54,7 +54,7 @@ player.loadLocalPlayer = function() {
         });
   });
 
-  return Promise.all([pgsProfile, gaiaProfile]);
+  return Promise.all([pgsProfile, userProfile]);
 };
 
 // Adds a size option to the FIFE URL.

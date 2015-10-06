@@ -37,19 +37,19 @@ model.setStarsFor = function(world, level, newNum){
   // stars.
   switch (model.inv.countMyStars()) {
   case 8:
-    pgs.achievements.unlock(achievements[0]);
+    pgs.achievements.unlock(constants.ACH_OCTASTAR);
     break;
   case 16:
-    pgs.achievements.unlock(achievements[1]);
+    pgs.achievements.unlock(constants.ACH_HEXADECASTAR);
     break;
   case 32:
-    pgs.achievements.unlock(achievements[2]);
+    pgs.achievements.unlock(constants.ACH_DOTRIACONTASTAR);
     break;
   case 64:
-    pgs.achievements.unlock(achievements[3]);
+    pgs.achievements.unlock(constants.ACH_TETRAHEXACONTASTAR);
     break;
   case 128:
-    pgs.achievements.unlock(achievements[4]);
+    pgs.achievements.unlock(constants.ACH_OCTAICOSAHECTASTAR);
     break;
   }
 };
