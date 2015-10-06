@@ -27,105 +27,29 @@ model.inv = new Inventory();
 model.INVENTORY_SLOT = 0;
 model.lastCloudSaveVersion = '';
 
-model.loadCloudSave = function(callback) {
-  console.log("Loading cloud save data");
-  gapi.client.request({
-    path: login.appStatePath + '/states/' + model.INVENTORY_SLOT,
-    callback: function(response, rawResponse) {
-      console.log('Cloud get response: ', response, rawResponse);
-      var responseObject = JSON.parse(rawResponse);
-      if (responseObject.gapiRequest.data.status == 404) {
-        // Looks like there's no data. Must be our first time playing
-        model.inv.loadEmpty();
-      } else {
-        console.log('Here is your saved game ', response);
-        if (response.kind == ('appstate#getResponse') &&
-            response.hasOwnProperty('data')) {
-          model.inv.loadDataFromCloud(response.data);
-          model.lastCloudSaveVersion = response.currentStateVersion;
-        } else {
-          console.log("This was not the response I expected.");
-          model.inv.loadEmpty();
-        }
-      }
-      callback();
-    }
-  });
-};
-
-model.beginMergeResolve = function(originalCallback) {
-  gapi.client.request({
-    path: login.appStatePath + '/states/' + model.INVENTORY_SLOT,
-    callback: function(response) {
-        if (response.kind == ('appstate#getResponse') &&
-            response.hasOwnProperty('data')) {
-
-          // Merge the two sets of data
-          var serverData = new Inventory();
-          serverData.loadDataFromCloud(response.data);
-          var mergedData = new Inventory();
-          for (var world=1; world<=20; world++) {
-            for (var level=1; level<=12; level++) {
-              var maxStars = Math.max(model.inv.getStarsFor(world, level),
-                                      serverData.getStarsFor(world, level));
-              if (maxStars > 0) {
-                mergedData.setStarsFor(world, level, maxStars);
-              }
-            }
-          }
-          console.log("This is my merged data  " , mergedData);
-          model.lastCloudSaveVersion = response.currentStateVersion;
-          model.inv = mergedData;
-          model.saveToCloud(originalCallback);
-        } else {
-          console.log("Something really strange is going on");
-        }
-    }
-  });
-};
-
-model.saveToCloud = function(callback) {
-  console.log("Saving to cloud", atob(model.inv.getCloudSaveData()));
-  var paramsObj = {};
-  if (model.lastCloudSaveVersion != '') {
-    paramsObj['currentStateVersion'] = model.lastCloudSaveVersion;
-  }
-  gapi.client.request({
-    path: login.appStatePath + '/states/' + model.INVENTORY_SLOT,
-    params: paramsObj,
-    body: {
-      kind: 'appstate#updateRequest',
-      data: model.inv.getCloudSaveData()
-    },
-    method: 'put',
-    callback: function (data, rawResponse) {
-      console.log('Cloud update response: ', data, rawResponse);
-      var responseObject = JSON.parse(rawResponse);
-
-      if (responseObject.gapiRequest.data.status == 409) {
-        // Uh-oh! Conflict
-        console.log("We appear to be out of date");
-        model.beginMergeResolve(callback)
-        //model.requestUpdatedStateForMerging(objectToSave);
-      } else if (data.kind == "appstate#writeResult") {
-        // We'll want to look for an error
-        if (!data.hasOwnProperty('error')) {
-          // We need to update our version, and we'll save
-          // our inventory
-          model.lastCloudSaveVersion = data.currentStateVersion;
-          callback();
-        }
-      }
-    }
-  });
-};
-
-
-
 model.getStarsFor = function(world, level) {
   return model.inv.getStarsFor(world, level);
 };
 
 model.setStarsFor = function(world, level, newNum){
   model.inv.setStarsFor(world, level, newNum);
+  // Activate achievements when the user reaches a predetermined number of
+  // stars.
+  switch (model.inv.countMyStars()) {
+  case 8:
+    pgs.achievements.unlock(constants.ACH_OCTASTAR);
+    break;
+  case 16:
+    pgs.achievements.unlock(constants.ACH_HEXADECASTAR);
+    break;
+  case 32:
+    pgs.achievements.unlock(constants.ACH_DOTRIACONTASTAR);
+    break;
+  case 64:
+    pgs.achievements.unlock(constants.ACH_TETRAHEXACONTASTAR);
+    break;
+  case 128:
+    pgs.achievements.unlock(constants.ACH_OCTAICOSAHECTASTAR);
+    break;
+  }
 };

@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "Roboto-Light";
+  font-style: normal;
+  src: url("/pgs/res/Roboto-Light.ttf");
+}
+
+body {
+  background-color: white;
+  font-family: Roboto-Light;
+  font-size: large;
+  margin: 0px;
+}
+
+h1 {
+  background-color: #b2cb39;
+  color: white;
+  font-size: large;
+  font-weight: 100;
+  height: 60px;
+  line-height: 60px;
+  padding-left:1em;
+}
+
+p {
+  overflow: hidden;
+  padding-left:2em;
+  padding-right: 2em;
+  text-overflow: ellipsis;
+}
+
+.icon {
+  height:30px;
+  margin: 5px;
+  width: 30px;
+}
+
+.icon-container {
+  background-color: #92ab1c;
+  border-radius: 50%;
+  float: right;
+  height: 40px;
+  margin: 10px;
+  width: 40px;
+}
+
+button {
+  background-color: white;
+  border-bottom: none;
+  border-top: solid gray 1px;
+  bottom: 0px;
+  font-size: small;
+  padding: 15px;
+  position: absolute;
+  width: 50%;
+}
+
+button.left {
+  border-left: none;
+  border-right: solid gray 1px;
+  left: 0px;
+}
+
+button.right {
+  border-left: none;
+  border-right: none;
+  right: 0px;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  background-color: aliceblue;
+}

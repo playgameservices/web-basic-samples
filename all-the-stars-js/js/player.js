@@ -27,19 +27,46 @@ var player = player || {};
 player.displayName = '';
 player.profileUrl = '';
 player.userId = '';
+player.email = '';
 
 player.loadLocalPlayer = function() {
-  gapi.client.request({
-        path: login.basePath + '/players/me',
-        callback: function(data) {
-          console.log('This is who you are ', data);
-          $('#welcome #message').text('Welcome, ' + data.displayName + '!');
-          $('#logoutLink').show();
-          player.displayName = data.displayName;
-          player.profileUrl = data.avatarImageUrl;
-          player.userId = data.playerId;
-          console.log('This is the player object', player);
-        }
+  var pgsProfile = new Promise(function(resolve, reject) {
+    gapi.client.request({
+      path: login.basePath + '/players/me',
+      callback: function(data) {
+        console.log('This is who you are ', data);
+        $('#welcome #message').text('Welcome, ' + data.displayName + '!');
+        $('#logoutLink').show();
+        player.displayName = data.displayName;
+        player.profileUrl = data.avatarImageUrl;
+        player.userId = data.playerId;
+        console.log('This is the player object', player);
+        resolve();
       }
-  )
+    });
+  });
+
+  var userProfile = new Promise(function(resolve, reject) {
+    chrome.identity.getProfileUserInfo(
+        function(userInfo) {
+          player.email = userInfo.email;
+          resolve();
+        });
+  });
+
+  return Promise.all([pgsProfile, userProfile]);
+};
+
+// Adds a size option to the FIFE URL.
+var addFifeSize = function(url) {
+  var a = document.createElement('a');
+  a.href = url;
+  // TODO(kenobi): account for different resolution displays
+  a.pathname = a.pathname.replace(/^(.*)\/([^/]*)/, '$1/s92-c/$2');
+  return a.href;
+};
+
+// Retrieves a player's profile image via xhr.
+player.getProfileImg = function() {
+  return pgs.util.getImg(addFifeSize(player.profileUrl));
 };

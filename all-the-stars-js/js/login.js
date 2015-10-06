@@ -23,39 +23,59 @@
 
 var login = login || {};
 
-
 login.userId = '';
+login.clientId = '';
 login.loggedIn = false;
+login.authToken = null;
 
-
-login.scopes = 'https://www.googleapis.com/auth/games https://www.googleapis.com/auth/appstate';
+login.scopes = 'https://www.googleapis.com/auth/games';
 login.basePath = '/games/v1';
-login.appStatePath = '/appstate/v1';
 
 login.init = function() {
+  // Read oauth client id from the manifest (needed for login)
+  var manifest = chrome.runtime.getManifest();
+  login.clientId = manifest.oauth2.client_id;
+
   // Need to add this 1 ms timeout to work around an odd but annoying bug
   window.setTimeout(login.trySilentAuth, 1);
 };
 
 login.handleAuthResult = function(auth) {
   console.log('We are in handle auth result');
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError.message);
+  }
   if (auth) {
     console.log('Hooray! You\'re logged in!');
-    $('#loginDiv').fadeOut();
-    player.loadLocalPlayer();
+    // Show the PGS splash screen.
+    login.authToken = auth;
+    pgs.showSplashscreen();
+    // Once player info is loaded, show a login toast.
+    player.loadLocalPlayer().then(pgs.toast.login.bind(null, player));
+    pgs.achievements.initialize();
     game.init();
   } else {
-    $('#loginDiv').fadeIn();
+    login.showLoginDialog();
   }
 };
 
-
 login.trySilentAuth = function() {
   console.log('Trying silent auth');
-  gapi.auth.authorize({client_id: constants.CLIENT_ID, scope: login.scopes, immediate: true}, login.handleAuthResult);
+  gapi.auth.authorize(
+      {
+        client_id: login.clientId,
+        scope: login.scopes,
+        immediate: true
+      },
+      login.handleAuthResult);
 };
 
 login.showLoginDialog=function() {
-  gapi.auth.authorize({client_id: constants.CLIENT_ID, scope: login.scopes, immediate: false}, login.handleAuthResult);
+  gapi.auth.authorize(
+      {
+        client_id: login.clientId,
+        scope: login.scopes,
+        immediate: false
+      },
+      login.handleAuthResult);
 };
-

@@ -57,5 +57,11 @@ function Inventory() {
     return btoa(JSON.stringify(cloudSaveObject));
   };
 
-
+  this.countMyStars = function() {
+    var count = 0;
+    for (var level in myInv) {
+      count += myInv[level];
+    }
+    return count;
+  };
 }

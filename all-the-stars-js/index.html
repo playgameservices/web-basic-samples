@@ -2,13 +2,13 @@
 <html>
 <head>
     <title></title>
+    <link rel="import" href="pgs/toast/toast.html">
 </head>
 <body>
 <header>
     <p id="pageHeader">Collect All the Stars!</p>
 </header>
 <div role="main">
-    <div id="loginDiv" style="display: none;">Welcome! <img id="login" src="img/gplus_signin_normal.png"></div>
     <div id="welcome" style="display: none;">
         <div id="message">Welcome, playername!</div>
     </div>
@@ -41,15 +41,13 @@
                 <td><button id="level12"></button> </td>
             </tr>
         </table>
-        <div id="loadSave">
-            <button id="saveToCloud">Save</button>
-            <button id="loadCloudSave">Load</button>
-        </div>
+        <button id="logout">Log Out</button>
     </div>
 
     <!-- JavaScript at the bottom for fast page loading -->
     <script src="js/vendor/jquery-1.8.0.min.js"></script>
     <script src="js/constants.js"></script>
+    <script src="pgs/pgs.js"></script>
     <script src="js/game.js"></script>
     <script src="js/inventory.js"></script>
     <script src="js/login.js"></script>

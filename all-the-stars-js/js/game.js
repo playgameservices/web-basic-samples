@@ -33,7 +33,6 @@ game.currentWorld = 1;
 game.init = function() {
   $('#game').fadeIn();
   game.refreshInterface();
-  model.loadCloudSave(game.refreshInterface);
 };
 
 game.refreshInterface = function() {
@@ -48,15 +47,6 @@ game.refreshInterface = function() {
     $("#level" + i).html($buttonHtml);
   }
  };
-
-
-game.loadCloudSave = function() {
-  model.loadCloudSave(game.refreshInterface);
-};
-
-game.saveToCloud = function() {
-  model.saveToCloud(game.refreshInterface);
-};
 
 game.levelClick = function(whatLevel) {
   var starNum = model.getStarsFor(game.currentWorld, whatLevel);
