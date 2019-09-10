@@ -1,5 +1,3 @@
-# Google Play game services - Web basic samples
+This repository has been removed.
 
-This is a collection of basic samples for the Google Play game services
-web APIs.
-
+See the [Google Play Games Services](https://developers.google.com/games/services/) developer site for the latest APIs and documentation.

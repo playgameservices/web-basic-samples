@@ -1,9 +1,0 @@
-# Let's avoid having my constants make their way into source control. :)
-js/constants_real.js
-js/constants_fake.js
-
-# And a few other assorted file extensions
-*.bk
-*.iml
-.DS_Store
-.idea
